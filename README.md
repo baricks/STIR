@@ -4,13 +4,13 @@ A personalized waking app and social performance.
 
 ## Getting started
 
-This repo is based on starter code from IBM Watson, which can be found here: https://github.com/watson-developer-cloud/personality-insights-nodejs. The IBM Watson Personality Insights API uses linguistic analysis to extract cognitive and social characteristics from input text.
+This repo is based on [starter code](https://github.com/watson-developer-cloud/personality-insights-nodejs) from IBM Watson. The IBM Watson Personality Insights API uses linguistic analysis to extract cognitive and social characteristics from input text.
 
 The following directions for getting set up with the repo are from IBM Watson:
 
-1. You need a Bluemix account. If you don't have one, [sign up][sign_up]. Experimental Watson Services are free to use.
+1. You need a Bluemix account. If you don't have one, [sign up](https://console.bluemix.net/registration/). Experimental Watson Services are free to use.
 
-2. Download and install the [Cloud-foundry CLI][cloud_foundry] tool if you haven't already.
+2. Download and install the [Cloud-foundry CLI](https://github.com/cloudfoundry/cli) tool if you haven't already.
 
 3. Edit the `manifest.yml` file and change `<application-name>` to something unique. The name you use determines the URL of your application. For example, `<application-name>.mybluemix.net`.
 
