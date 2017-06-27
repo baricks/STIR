@@ -158,6 +158,11 @@ $(document).ready(function() {
     getProfileForTwitterUser(twitterHandle, options);
   }
 
+  // function loadFacebookUser(facebookName, options) {
+  //   setLoadingState();
+  //   getProfileForFacebookUser(facebookName, options);
+  // }
+
   function registerHandlers() {
     globalState.userLocale = getBrowserLangNoLocale();
 
@@ -165,24 +170,24 @@ $(document).ready(function() {
       globalState.selectedLanguage = $(this).attr('value');
     });
 
-    $('input[name="text-sample"]').click(function() {
-      var textFile = $(this).attr('data-file'),
-        orientation = $(this).attr('data-orientation');
-      globalState.selectedSample = textFile;
-
-      if (orientation === 'right-to-left') {
-        $inputTextArea.removeClass('left-to-right');
-        $inputTextArea.addClass('right-to-left');
-      } else {
-        $inputTextArea.removeClass('right-to-left');
-        $inputTextArea.addClass('left-to-right');
-      }
-
-      $('#languageChooser').hide();
-
-      loadSampleText(textFile);
-      updateWordCount();
-    });
+    // $('input[name="text-sample"]').click(function() {
+    //   var textFile = $(this).attr('data-file'),
+    //     orientation = $(this).attr('data-orientation');
+    //   globalState.selectedSample = textFile;
+    //
+    //   if (orientation === 'right-to-left') {
+    //     $inputTextArea.removeClass('left-to-right');
+    //     $inputTextArea.addClass('right-to-left');
+    //   } else {
+    //     $inputTextArea.removeClass('right-to-left');
+    //     $inputTextArea.addClass('left-to-right');
+    //   }
+    //
+    //   $('#languageChooser').hide();
+    //
+    //   loadSampleText(textFile);
+    //   updateWordCount();
+    // });
 
     $(window).resize(function() {
       if ($(window).width() < 800) {
@@ -217,6 +222,14 @@ $(document).ready(function() {
       globalState.selectedTwitterImage = $('label[for="' + $(this).attr('id') + '"] img').attr('src');
       globalState.selectedTwitterUserLang = twitterLang;
     });
+
+    // $('input[name="facebook"]').click(function() {
+    //   var facebookId = $(this).val();
+    //   var facebookLang = $(this).attr('data-lang');
+    //   globalState.selectedFacebookUser = facebookId;
+    //   globalState.selectedFacebookImage = $('label[for="' + $(this).attr('id') + '"] img').attr('src');
+    //   globalState.selectedFacebookUserLang = facebookLang;
+    // });
 
     $inputForm1.submit(function(e) {
       e.cancelBubble = true;
