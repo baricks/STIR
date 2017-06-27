@@ -1,0 +1,404 @@
+<$ include partials/header $>
+  <div class="_demo--container">
+    <div class="_content input">
+      <h2 class="base--h2">STIR</h2>
+      <h3 class="base--h3">A personalized waking system and social performance</h3>
+      <p class="base--p">Log into your social platforms to get started. For statistically significant results, you need at least 3500 words and ideally 6000.</p>
+      <div class="tab-panels" role="tabpanel">
+        <span class="input--reset icon-hyperlink">
+          <span class="icon icon-reset"></span>
+        <button class="base--a icon-hyperlink--button icon-hyperlink--button_BLANK input--reset-button" href="" type="reset">
+            <$= __("button-reset") $>
+          </button>
+        </span>
+        <ul class="tab-panels--tab-list" role="tablist">
+          <li class="tab-panels--tab-list-item base--li" style="<% if (showTwitterButton) { %>display: none;<% } %>" role="presentation">
+            <a class="tab-panels--tab base--a" id="self-analysis-tab" href="#your-twitter-panel" aria-controls="text-panel" role="tab">Connect Twitter</a>
+          </li>
+          <li class="tab-panels--tab-list-item base--li" style="<% if (showFacebookButton) { %>display: none;<% } %>" role="presentation">
+            <a class="tab-panels--tab base--a" id="self-analysis-tab" href="#your-facebook-panel" aria-controls="text-panel" role="tab">Connect Facebook</a>
+          </li>
+        </ul>
+        <div class="tab-panels--tab-content">
+          <div id="your-twitter-panel" class="tab-panels--tab-pane" role="tab-panel">
+            <form class="input--form3 auth-form" method='get' action='/auth/twitter'>
+              <p class="base--p" style="text-align:center"><button type="submit" class="base--button input--submit-button3"><$= __("button-analyzetwitter") $></button></p>
+              <p class="base--p"><strong><$= __("note-title") $></strong>
+                <$= __("note-twitter") $>
+                  <p>
+            </form>
+            <form class="input-form4 analysis-form" style="display:none">
+              <div class="base--h5 input--choose">
+                <$= __("analysis-title") $>
+              </div>
+              <input role="radio" class="base--radio" type="radio" id="my-twitter" name="twitter" value="myself">
+              <label class="base--inline-label input--radio" for="my-twitter">
+                <img class="input--thumb" src="/images/no-image.png">@<$= __("label-myself") $></label>
+            </form>
+          </div>
+
+          <div id="your-facebook-panel" class="tab-panels--tab-pane" role="tab-panel">
+            <!--
+              Below we include the Login Button social plugin. This button uses
+              the JavaScript SDK to present a graphical Login button that triggers
+              the FB.login() function when clicked.
+            -->  <fb:login-button scope="public_profile,email,user_posts" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-show-faces="true" data-auto-logout-link="false">
+              </fb:login-button>
+            <div class="tab-panels" role="tabpanel">
+               <!-- body of text title here-->
+              <div class="tab-panels--tab-content">
+                <div id="text-panel" class="tab-panels--tab-pane active" role="tab-panel">
+                  <form class="input--form2">
+                    <textarea id="inputText" class="base--textarea input--text-area" placeholder="Please enter text to analyze (minimum of 100 words)...">
+                    </textarea>
+                    <div class="input--button-container">
+                      <div id="languageChooser" class="input--language-chooser smartphone-hidden" style="display:none">
+                        <div class="base--h5 input--choose">Choose language:</div>
+
+                        <input role="radio" class="base--radio" type="radio" id="lang-en" name="text-lang" value="en"/>
+                        <label class="base--inline-label" for="lang-en">English</label>
+                        <input role="radio" class="base--radio" type="radio" id="lang-es" name="text-lang" value="es"/>
+                        <label class="base--inline-label" for="lang-es">Spanish</label>
+                        <input role="radio" class="base--radio" type="radio" id="lang-ar" name="text-lang" value="ar"/>
+                        <label class="base--inline-label" for="lang-ar" style="display:none;">Arabic</label>
+                      </div>
+
+                      <button type="submit" class="base--button input--submit-button2">Analyze</button>
+                    </div>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="_demo--bg-container">
+    <div class="_demo--container">
+      <div class="_content">
+        <h3 class="base--h3 output--header"><$= __("title-output") $></h3>
+        <div class="loading">
+          <div class="loading--icon">
+            <img src="images/loading-indicator.gif" width="100%" alt="">
+          </div>
+        </div>
+        <div class="error">
+          <p class="error--message">
+            <$= __("message-error") $>
+          </p>
+        </div>
+        <div class="output">
+          <h2 class="base--h2"><$= __("title-personality") $></h2>
+          <!-- <h4 class="base--h4 output--word-count-header"><span class="output--word-count-number">0</span> <$= __("label-wordsanalyzed") $>
+            <div class="output--word-count-message output--word-count-message_VERY-STRONG"><$= __("analysis-verystrong") $>
+              <div class="output--word-count-tooltip_VERY-STRONG tooltip"><$= __("analysis-verystrong-desc") $></div>
+            </div>
+            <div class="output--word-count-message output--word-count-message_STRONG"><$= __("analysis-strong") $>
+              <div class="output--word-count-tooltip_STRONG tooltip"><$= __("analysis-strong-desc") $></div>
+            </div>
+            <div class="output--word-count-message output--word-count-message_DECENT"><$= __("analysis-decent") $>
+              <div class="output--word-count-tooltip_DECENT tooltip"><$= __("analysis-decent-desc") $></div>
+            </div>
+            <div class="output--word-count-message output--word-count-message_WEAK"><$= __("analysis-weak") $>
+              <div class="output--word-count-tooltip_WEAK tooltip"><$= __("analysis-weak-desc") $></div>
+            </div>
+            <div class="output--word-count-message output--word-count-message_VERY-STRONG_NEW_MODEL"><$= __("analysis-verystrong") $>
+              <div class="output--word-count-tooltip_VERY-STRONG tooltip"><$= __("analysis-verystrong-desc-new-model") $></div>
+            </div>
+            <div class="output--word-count-message output--word-count-message_STRONG_NEW_MODEL"><$= __("analysis-strong") $>
+              <div class="output--word-count-tooltip_STRONG tooltip"><$= __("analysis-strong-desc-new-model") $></div>
+            </div>
+            <div class="output--word-count-message output--word-count-message_DECENT_NEW_MODEL"><$= __("analysis-decent") $>
+              <div class="output--word-count-tooltip_DECENT_NEW_MODEL tooltip"><$= __("analysis-decent-desc-new-model") $></div>
+            </div>
+            <div class="output--word-count-message output--word-count-message_WEAK_NEW_MODEL"><$= __("analysis-weak") $>
+              <div class="output--word-count-tooltip_WEAK tooltip"><$= __("analysis-weak-desc-new-model") $></div>
+            </div>
+          </h4> -->
+          <!-- <div class="output-summary"> -->
+            <!-- <div class="output-summary--left">
+              <h4 class="base--h4"><$= __("title-summary") $></h4>
+              <div id="personalitySummary" class="output-summary--summary">
+                <p class="base--p">
+                  <$= __("label-summary") $>
+                </p>
+              </div>
+              <a class="base--a output-summary--summary-link" href="http://www.ibm.com/watson/developercloud/doc/personality-insights/science.shtml" target="_blank"><$= __("button-how") $></a>
+            </div> -->
+            <!-- <div class="output-summary--right">
+              <div class="output-summary--consumption-behaviors--section">
+                <h4 class="base--h4"><$= __("behavior-likely") $></h4>
+                <div class="output-summary--likely-behaviors">
+                </div>
+                <h4 class="base--h4"><$= __("behavior-unlikely") $></h4>
+                <div class="output-summary--unlikely-behaviors">
+                </div>
+              </div>
+            </div> -->
+          <!-- </div> -->
+          <!-- <div class="output--stats-row">
+            <div class="output-big-5 output-stats-column">
+              <h4 class="base--h4"><$= __("results-personality") $></h4>
+              <div class="output-stats-column--percentile-label">*% =
+                <$= __("label-percentile") $>
+              </div>
+              <div class="output-big-5--traits output-stats-column--traits"></div>
+            </div>
+            <div class="output-needs output-stats-column">
+              <h4 class="base--h4"><$= __("results-needs") $></h4>
+              <div class="output-stats-column--percentile-label">*% =
+                <$= __("label-percentile") $>
+              </div>
+              <div class="output-needs--traits output-stats-column--traits"></div>
+              <div class="output-needs--more-traits"></div>
+              <a class="output-needs--toggle output-stats-column--toggle base--a" href="javascript:void(0);">>></a>
+            </div>
+            <div class="output-values output-stats-column">
+              <h4 class="base--h4"><$= __("results-values") $></h4>
+              <div class="output-stats-column--percentile-label">*% =
+                <$= __("label-percentile") $>
+              </div>
+              <div class="output-values--traits output-stats-column--traits"></div>
+            </div>
+          </div> -->
+          <span class="icon-hyperlink output--json-hyperlink">
+            <span class="icon icon-code"></span>
+          <button class="base--a icon-hyperlink--button icon-hyperlink--button_BLANK output--json-button" href="">
+              <$= __("button-json") $>
+            </button>
+          </span>
+          <div class="output--json">
+            <h3 class="base--h3"><$= __("label-json") $></h3>
+            <pre class="base--pre language-javascript output--json-pre"><code class="base--code language-javascript output--json-code code--json"></code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/html" id="big5PercentTemplate">
+    <% _.each(items, function(item, key, list) { %>
+      <% if (typeof list[key - 1] != 'undefined' && (list[key - 1].score >= 50 && item.score < 50)) { %>
+        <hr class="base--hr output-stats-column--hr">
+        <% } %>
+          <div class="percent-bar-and-score">
+            <div class="percent-bar-and-score--label output-big-5--trait-label <%= (item.score >= 50) ? 'output-big-5--trait-label_POSITIVE' : 'output-big-5--trait-label_NEGATIVE' %>">
+              <%= item.name %>
+                <i class="icon icon-down-arrow percent-bar-and-score--toggle-icon"></i>
+                <div class="tooltip">
+                  <%= tooltips(item.id) || '<$= __('tooltip-not-available') $>' %>
+                </div>
+            </div>
+            <div class="percent-bar percent-bar-and-score--percent-bar">
+              <div class="percent-bar--meter" style="-webkit-transform: translate(<%= item.score %>%); transform: translate(<%= item.score %>%)">
+                <div class="percent-bar--ball <%= (item.score >= 50) ? 'percent-bar--ball_POSITIVE-FILL' : 'percent-bar--ball_NEGATIVE-FILL' %>"></div>
+                <div class="percent-bar-and-score--number">
+                  <%= item.score %>%</div>
+              </div>
+            </div>
+          </div>
+          <div class="output-big-5--sub-tree">
+            <% _.each(item.children, function(item2, key, list) { %>
+              <div class="percent-bar-and-score">
+                <div class="percent-bar-and-score--label output-big-5--sub-trait-label <%= (item2.score >= 50) ? 'output-big-5--sub-trait-label_POSITIVE' : 'output-big-5--sub-trait-label_NEGATIVE' %>">
+                  <%= item2.name %>
+                    <div class="tooltip">
+                      <%= tooltips(item2.id) || '<$= __('tooltip-not-available') $>' %>
+                    </div>
+                </div>
+                <div class="percent-bar percent-bar-and-score--percent-bar">
+                  <div class="percent-bar--meter" style="-webkit-transform: translate(<%= item.score %>%); transform: translate(<%= item2.score %>%)">
+                    <div class="percent-bar--ball <%= (item2.score >= 50) ? 'percent-bar--ball_POSITIVE-FILL' : 'percent-bar--ball_NEGATIVE-FILL' %>"></div>
+                    <div class="percent-bar-and-score--number">
+                      <%= item2.score %>%</div>
+                  </div>
+                </div>
+              </div>
+              <% }); %>
+          </div>
+          <% });%>
+  </script>
+
+  <script type="text/html" id="outputStatsPercentTemplate">
+    <% _.each(items, function(item, key, list) { %>
+      <% if (typeof list[key - 1] != 'undefined' && (list[key - 1].score >= 50 && item.score < 50)) { %>
+        <hr class="base--hr output-stats-column--hr">
+        <% } %>
+          <div class="percent-bar-and-score">
+            <div class="percent-bar-and-score--label <%= (item.score >= 50) ? 'percent-bar-and-score--label_POSITIVE' : 'percent-bar-and-score--label_NEGATIVE' %>">
+              <%= item.name %>
+                <div class="tooltip">
+                  <%= tooltips(item.id) || '<$= __('tooltip-not-available') $>' %>
+                </div>
+            </div>
+            <div class="percent-bar percent-bar-and-score--percent-bar">
+              <div class="percent-bar--meter" style="-webkit-transform: translate(<%= item.score %>%); transform: translate(<%= item.score %>%)">
+                <div class="percent-bar--ball <%= (item.score >= 50) ? 'percent-bar--ball_POSITIVE-FILL' : 'percent-bar--ball_NEGATIVE-FILL' %>"></div>
+                <div class="percent-bar-and-score--number">
+                  <%= item.score %>%</div>
+              </div>
+            </div>
+          </div>
+          <% });%>
+  </script>
+
+
+  <script type="text/html" id="outputBehaviorsTemplate">
+    <% _.each(items, function(item, key, list) { %>
+      <div class="output-summary--behavior <%= item.score > 0.5 ? 'output-summary--behavior_POSITIVE' : 'output-summary--behavior_NEGATIVE' %>">
+        <i class="icon <%= item.score > 0.5 ? 'icon-likely' : 'icon-not-likely' %>"></i>
+        <%= item.verb %>
+          <div class="tooltip">
+            <%= item.description %>
+              <div class="tooltip--hover-fix"></div>
+          </div>
+      </div>
+    <% }); %>
+  </script>
+
+  <script>
+  // This is called with the results from from FB.getLoginStatus().
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    console.log(response);
+    // The response object is returned with a status field that lets the
+    // app know the current login status of the person.
+    // Full docs on the response object can be found in the documentation
+    // for FB.getLoginStatus().
+    if (response.status === 'connected') {
+      // Logged into your app and Facebook.
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+      // The person is logged into Facebook, but not your app.
+      document.getElementById('inputText').innerHTML = 'Please log ' +
+        'into this app.';
+    } else {
+      // The person is not logged into Facebook, so we're not sure if
+      // they are logged into this app or not.
+      document.getElementById('inputText').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+  }
+
+  // This function is called when someone finishes with the Login
+  // Button.  See the onlogin handler attached to it in the sample
+  // code below.
+  function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '837607693056127',
+    cookie     : true,  // enable cookies to allow the server to access
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use version 2.2
+  });
+
+  // Now that we've initialized the JavaScript SDK, we call
+  // FB.getLoginStatus().  This function gets the state of the
+  // person visiting this page and can return one of three states to
+  // the callback you provide.  They can be:
+  //
+  // 1. Logged into your app ('connected')
+  // 2. Logged into Facebook, but not your app ('not_authorized')
+  // 3. Not logged into Facebook and can't tell if they are logged into
+  //    your app or not.
+  //
+  // These three cases are handled in the callback function.
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    getFBPosts();
+    //only getting 274? back tho..
+  }
+  function getFBPosts() {
+
+    var posts;
+    FB.api(
+      '/me/feed?limit=1000',
+      'GET',
+      {"fields":"message"},
+      function(response) {
+        var post =" ";
+        for(var k in response.data) {
+          post = response.data[k].message;
+          if(post === undefined || post === null){
+            post = " ";
+          }
+          posts+="\n "+post;
+        }
+        document.getElementById('inputText').value = posts.replace("undefined", "");
+        console.log("got posts: "+posts);
+          // Insert your code here
+      }
+    );
+  }
+</script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-url-parser/2.3.1/purl.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/5.0.2/markdown-it.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+
+
+  <script type="text/javascript" src="js/vendors/q.js"></script>
+  <script type="text/javascript" src="js/components/q_util.js"></script>
+  <script type="text/javascript" src="js/components/tab-panels.js"></script>
+
+  <script type="text/javascript" src="vendor/personality-text-summary/dist/index.js"></script>
+  <script type="text/javascript" src="vendor/personality-trait-info/dist/index.js"></script>
+  <script type="text/javascript" src="vendor/personality-trait-descriptions/dist/index.js"></script>
+  <script type="text/javascript" src="vendor/personality-trait-names/dist/index.js"></script>
+  <script type="text/javascript" src="vendor/personality-consumption-preferences/dist/index.js"></script>
+  <script type="text/javascript" src="js/sunburst.js"></script>
+
+  <script type="text/javascript" src="js/demo.js"></script>
+  <script type="text/javascript" src="js/logic.js"></script>
+  <script type="text/javascript" src="js/consumption-preferences-likely-sort.js"></script>
+  <script type="text/javascript" src="js/consumption-preferences-unlikely-sort.js"></script>
+
+  <script type="text/javascript">
+    var TWITTER_USER = <$- JSON.stringify(twitterUser) $>;
+    var GENERIC_REQUEST_ERROR = '<$= __('error-request') $>';
+    var OUTPUT_LANG = '<$= locale $>';
+  </script>
+
+  <script type="text/javascript">
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-59827755-8', 'auto');
+    ga('send', 'pageview');
+  </script>
+</body>
+</html>

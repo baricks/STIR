@@ -1,0 +1,14 @@
+[
+  {
+    "name"     : "Japanese Text",
+    "language" : "ja",
+    "file"     : "ja"
+  },
+  {
+    "name"     : "Arabic Text",
+    "language" : "ar",
+    "file"     : "ar",
+    "hidden"   : false,
+    "orientation": "right-to-left"
+  }
+]
