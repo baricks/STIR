@@ -93,10 +93,10 @@ function renderMarkdown(s) {
 
 $(document).ready(function() {
 
-  var SAMPLE_TEXTS = [ 'ar', 'ja'];
+  // var SAMPLE_TEXTS = [ 'ar', 'ja'];
   var textCache = {};
 
-  globalState.selectedSample = SAMPLE_TEXTS[0];
+  // globalState.selectedSample = SAMPLE_TEXTS[0];
   globalState.languageSelected = undefined;
 
   var $big5Traits = $('.output-big-5--traits');
@@ -702,24 +702,25 @@ $(document).ready(function() {
     }
   }
 
-  function showHiddenLanguages() {
-    var enableLang = {
-      'ar': function() {
-        $('label[for="text-ar"]').show();
-        $('label[for="lang-ar"]').show();
-      }
-    };
+  // function showHiddenLanguages() {
+  //   var enableLang = {
+  //     'ar': function() {
+  //       $('label[for="text-ar"]').show();
+  //       $('label[for="lang-ar"]').show();
+  //     }
+  //   };
+
 
     Object.keys($.url().param()).filter(function(p) {
-      return p.slice(0, 5) === 'lang-';
-    }).map(function(p) {
-      return p.slice(5, p.length);
-    }).forEach(function(lang) {
-      if (enableLang[lang]) {
-        enableLang[lang]();
-      }
-    });
-  }
+        return p.slice(0, 5) === 'lang-';
+      }).map(function(p) {
+        return p.slice(5, p.length);
+      }).forEach(function(lang) {
+        if (enableLang[lang]) {
+          enableLang[lang]();
+        }
+      });
+    }
 
   function selfAnalysis() {
     return QUERY_PARAMS.source == 'myself';
@@ -748,7 +749,7 @@ $(document).ready(function() {
     $('input[name="text-sample"]:first').attr('checked', true);
 
     globalState.selectedTwitterUser = $('input[name="twitter"]:first').val();
-    showHiddenLanguages();
+    // showHiddenLanguages();
     preloadSampleTexts(function() {
       loadSampleText(globalState.selectedSample);
     });

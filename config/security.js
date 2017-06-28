@@ -21,11 +21,9 @@ var rateLimit = require('express-rate-limit');
 var helmet = require('helmet');
 
 module.exports = (app) => {
-
-  app.enable('trust proxy');
-
   app.use(helmet({
-    cacheControl: false
+    cacheControl: false,
+    frameguard: false
   }));
 
   app.use(helmet.frameguard('allow-from', 'https://stir.mybluemix.net'));
