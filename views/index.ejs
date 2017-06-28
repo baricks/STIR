@@ -34,19 +34,17 @@
   }
 
   window.fbAsyncInit = function() {
-  FB.init({
-    appId      : '837607693056127',
-    cookie     : true,  // enable cookies to allow the server to access
-                        // the session
-    xfbml      : true,  // parse social plugins on this page
-    version    : 'v2.5' // use version 2.2
-  });
+    FB.init({
+      appId      : '837607693056127',
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v2.5'
+    });
 
-  // Get login status (logged into FB, logged into FB app, etc)
-
-  FB.getLoginStatus(function(response) {
-    statusChangeCallback(response);
-  });
+    // Get login status (logged into FB, logged into FB app, etc)
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
 
   };
 
@@ -80,12 +78,13 @@
           posts+="\n "+post;
         }
         document.getElementById('inputText').value = posts.replace("undefined", "");
-        console.log("got posts: "+posts);
-          // Insert your code here
+        console.log("got posts: " + posts);
       }
     );
   }
 </script>
+
+<!-- The HTML template: -->
 
   <div class="_demo--container">
     <div class="_content input">
@@ -108,6 +107,7 @@
           </li>
         </ul>
         <div class="tab-panels--tab-content">
+
           <!-- Twitter panel -->
           <div id="your-twitter-panel" class="tab-panels--tab-pane" role="tab-panel">
             <form class="input--form3 auth-form" method='get' action='/auth/twitter'>
@@ -125,16 +125,17 @@
                 <img class="input--thumb" src="/images/no-image.png">@<$= __("label-myself") $></label>
             </form>
           </div>
+
           <!-- Facebook panel -->
           <div id="your-facebook-panel" class="tab-panels--tab-pane" role="tab-panel">
             <fb:login-button scope="public_profile,email,user_posts" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-show-faces="true" data-auto-logout-link="false"></fb:login-button>
-            <div class="tab-panels" role="tabpanel">
-              <!-- <div class="tab-panels--tab-content">
-                <div id="text-panel" class="tab-panels--tab-pane active" role="tab-panel">
+            <!-- <div class="tab-panels" role="tabpanel">
+              <div class="tab-panels--tab-content">
+                <div id="text-panel" class="tab-panels--tab-pane active" role="tab-panel"> -->
+                  <button type="submit" class="base--button input--submit-button2">Analyze Facebook posts</button>
                   <form class="input--form2">
-                    <textarea id="inputText" class="base--textarea input--text-area" placeholder="Please enter text to analyze (minimum of 100 words)...">
-                    </textarea>
-                    <div class="input--button-container">
+                    <textarea id="inputText" class="base--textarea input--text-area" placeholder="Please enter text to analyze (minimum of 100 words)..."></textarea>
+                    <!-- <div class="input--button-container">
                       <div id="languageChooser" class="input--language-chooser smartphone-hidden" style="display:none">
                         <div class="base--h5 input--choose">Choose language:</div>
 
@@ -145,14 +146,12 @@
                         <input role="radio" class="base--radio" type="radio" id="lang-ar" name="text-lang" value="ar"/>
                         <label class="base--inline-label" for="lang-ar" style="display:none;">Arabic</label>
                       </div>
-
-                      <button type="submit" class="base--button input--submit-button2">Analyze</button>
-                    </div>
+                    </div> -->
 
                   </form>
-                </div>
-              </div> -->
-            </div>
+                <!-- </div>
+              </div>
+            </div> -->
           </div>
 
         </div>
@@ -364,7 +363,6 @@
   <script type="text/javascript" src="js/sunburst.js"></script>
 
   <script type="text/javascript" src="js/demo.js"></script>
-  <script type="text/javascript" src="js/logic.js"></script>
   <script type="text/javascript" src="js/consumption-preferences-likely-sort.js"></script>
   <script type="text/javascript" src="js/consumption-preferences-unlikely-sort.js"></script>
 

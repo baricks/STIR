@@ -158,11 +158,6 @@ $(document).ready(function() {
     getProfileForTwitterUser(twitterHandle, options);
   }
 
-  // function loadFacebookUser(facebookName, options) {
-  //   setLoadingState();
-  //   getProfileForFacebookUser(facebookName, options);
-  // }
-
   function registerHandlers() {
     globalState.userLocale = getBrowserLangNoLocale();
 
@@ -222,14 +217,6 @@ $(document).ready(function() {
       globalState.selectedTwitterImage = $('label[for="' + $(this).attr('id') + '"] img').attr('src');
       globalState.selectedTwitterUserLang = twitterLang;
     });
-
-    // $('input[name="facebook"]').click(function() {
-    //   var facebookId = $(this).val();
-    //   var facebookLang = $(this).attr('data-lang');
-    //   globalState.selectedFacebookUser = facebookId;
-    //   globalState.selectedFacebookImage = $('label[for="' + $(this).attr('id') + '"] img').attr('src');
-    //   globalState.selectedFacebookUserLang = facebookLang;
-    // });
 
     $inputForm1.submit(function(e) {
       e.cancelBubble = true;
@@ -788,6 +775,7 @@ $(document).ready(function() {
     $inputWordCount.text(countWords($inputTextArea.val()));
   }
 
+  // Save the JSON file
   function updateJSON(results) {
     $outputJSONCode.html(JSON.stringify(results, null, 2));
     $('.code--json').each(function(i, b) {
