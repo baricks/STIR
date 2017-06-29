@@ -709,18 +709,18 @@ $(document).ready(function() {
   //       $('label[for="lang-ar"]').show();
   //     }
   //   };
-
-
-    Object.keys($.url().param()).filter(function(p) {
-        return p.slice(0, 5) === 'lang-';
-      }).map(function(p) {
-        return p.slice(5, p.length);
-      }).forEach(function(lang) {
-        if (enableLang[lang]) {
-          enableLang[lang]();
-        }
-      });
-    }
+  //
+  //
+  //   Object.keys($.url().param()).filter(function(p) {
+  //       return p.slice(0, 5) === 'lang-';
+  //     }).map(function(p) {
+  //       return p.slice(5, p.length);
+  //     }).forEach(function(lang) {
+  //       if (enableLang[lang]) {
+  //         enableLang[lang]();
+  //       }
+  //     });
+  //   }
 
   function selfAnalysis() {
     return QUERY_PARAMS.source == 'myself';
@@ -750,9 +750,9 @@ $(document).ready(function() {
 
     globalState.selectedTwitterUser = $('input[name="twitter"]:first').val();
     // showHiddenLanguages();
-    preloadSampleTexts(function() {
-      loadSampleText(globalState.selectedSample);
-    });
+    // preloadSampleTexts(function() {
+    //   loadSampleText(globalState.selectedSample);
+    // });
     registerHandlers();
     $inputTextArea.addClass('orientation', 'left-to-right');
 

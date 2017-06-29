@@ -62,13 +62,13 @@ module.exports = (app) => {
     })
   );
 
-  // sunburst
-  app.post('/sunburst', (req, res) =>
-    res.render('sunburst', {
-      sunburst: pick(req.body, ['profile', 'image'])
-    })
-  );
-
-  // terms of use
-  app.get('/terms-of-use', (req, res) => res.render('terms-of-use'));
+  // // sunburst
+  // app.post('/sunburst', (req, res) =>
+  //   res.render('sunburst', {
+  //     sunburst: pick(req.body, ['profile', 'image'])
+  //   })
+  // );
+  //
+  // // terms of use
+  // app.get('/terms-of-use', (req, res) => res.render('terms-of-use'));
 };

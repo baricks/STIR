@@ -19,10 +19,10 @@
     if (response.status === 'connected') {
       testAPI();
     } else if (response.status === 'not_authorized') {
-      document.getElementById('inputText').innerHTML = 'Please log ' +
+      document.getElementById('inputText2').innerHTML = 'Please log ' +
         'into this app.';
     } else {
-      document.getElementById('inputText').innerHTML = 'Please log ' +
+      document.getElementById('inputText2').innerHTML = 'Please log ' +
         'into Facebook.';
     }
   }
@@ -77,7 +77,7 @@
           }
           posts+="\n "+post;
         }
-        document.getElementById('inputText').value = posts.replace("undefined", "");
+        document.getElementById('inputText2').value = posts.replace("undefined", "");
         console.log("got posts: " + posts);
       }
     );
@@ -111,7 +111,7 @@
           <!-- Twitter panel -->
           <div id="your-twitter-panel" class="tab-panels--tab-pane" role="tab-panel">
             <form class="input--form3 auth-form" method='get' action='/auth/twitter'>
-              <p class="base--p" style="text-align:center"><button type="submit" class="base--button input--submit-button3"><$= __("button-analyzetwitter") $></button></p>
+              <p class="base--p" style="text-align:left"><button type="submit" class="base--button input--submit-button3"><$= __("button-analyzetwitter") $></button></p>
               <p class="base--p"><strong><$= __("note-title") $></strong>
                 <$= __("note-twitter") $>
                   <p>
@@ -128,30 +128,11 @@
 
           <!-- Facebook panel -->
           <div id="your-facebook-panel" class="tab-panels--tab-pane" role="tab-panel">
-            <fb:login-button scope="public_profile,email,user_posts" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-show-faces="true" data-auto-logout-link="false"></fb:login-button>
-            <div class="tab-panels" role="tabpanel">
-              <!-- <div class="tab-panels--tab-content"> -->
-                <!-- <div id="text-panel" class="tab-panels--tab-pane active" role="tab-panel"> -->
-                  <form class="input--form2">
-                    <textarea id="inputText" class="base--textarea input--text-area" placeholder="Please enter text to analyze (minimum of 100 words)..."></textarea>
-                    <div class="input--button-container">
-                      <button type="submit" class="base--button input--submit-button2">Analyze Facebook posts</button>
-                      <!-- <div id="languageChooser" class="input--language-chooser smartphone-hidden" style="display:none">
-                        <div class="base--h5 input--choose">Choose language:</div>
-
-                        <input role="radio" class="base--radio" type="radio" id="lang-en" name="text-lang" value="en"/>
-                        <label class="base--inline-label" for="lang-en">English</label>
-                        <input role="radio" class="base--radio" type="radio" id="lang-es" name="text-lang" value="es"/>
-                        <label class="base--inline-label" for="lang-es">Spanish</label>
-                        <input role="radio" class="base--radio" type="radio" id="lang-ar" name="text-lang" value="ar"/>
-                        <label class="base--inline-label" for="lang-ar" style="display:none;">Arabic</label>
-                      </div> -->
-                    </div>
-
-                  </form>
-                <!-- </div> -->
-              <!-- </div> -->
-            </div>
+            <fb:login-button scope="public_profile,email,user_posts" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-show-faces="true" data-auto-logout-link="true"></fb:login-button>
+              <form class="input--form2">
+                <button type="submit" class="base--button input--submit-button2">Analyze Facebook posts</button>
+                <textarea id="inputText2" class="base--textarea input--text-area" placeholder="Please enter text to analyze (minimum of 100 words)..."></textarea>
+              </form>
           </div>
 
         </div>
@@ -175,78 +156,6 @@
         </div>
         <div class="output">
           <h2 class="base--h2"><$= __("title-personality") $></h2>
-          <!-- <h4 class="base--h4 output--word-count-header"><span class="output--word-count-number">0</span> <$= __("label-wordsanalyzed") $>
-            <div class="output--word-count-message output--word-count-message_VERY-STRONG"><$= __("analysis-verystrong") $>
-              <div class="output--word-count-tooltip_VERY-STRONG tooltip"><$= __("analysis-verystrong-desc") $></div>
-            </div>
-            <div class="output--word-count-message output--word-count-message_STRONG"><$= __("analysis-strong") $>
-              <div class="output--word-count-tooltip_STRONG tooltip"><$= __("analysis-strong-desc") $></div>
-            </div>
-            <div class="output--word-count-message output--word-count-message_DECENT"><$= __("analysis-decent") $>
-              <div class="output--word-count-tooltip_DECENT tooltip"><$= __("analysis-decent-desc") $></div>
-            </div>
-            <div class="output--word-count-message output--word-count-message_WEAK"><$= __("analysis-weak") $>
-              <div class="output--word-count-tooltip_WEAK tooltip"><$= __("analysis-weak-desc") $></div>
-            </div>
-            <div class="output--word-count-message output--word-count-message_VERY-STRONG_NEW_MODEL"><$= __("analysis-verystrong") $>
-              <div class="output--word-count-tooltip_VERY-STRONG tooltip"><$= __("analysis-verystrong-desc-new-model") $></div>
-            </div>
-            <div class="output--word-count-message output--word-count-message_STRONG_NEW_MODEL"><$= __("analysis-strong") $>
-              <div class="output--word-count-tooltip_STRONG tooltip"><$= __("analysis-strong-desc-new-model") $></div>
-            </div>
-            <div class="output--word-count-message output--word-count-message_DECENT_NEW_MODEL"><$= __("analysis-decent") $>
-              <div class="output--word-count-tooltip_DECENT_NEW_MODEL tooltip"><$= __("analysis-decent-desc-new-model") $></div>
-            </div>
-            <div class="output--word-count-message output--word-count-message_WEAK_NEW_MODEL"><$= __("analysis-weak") $>
-              <div class="output--word-count-tooltip_WEAK tooltip"><$= __("analysis-weak-desc-new-model") $></div>
-            </div>
-          </h4> -->
-          <!-- <div class="output-summary"> -->
-            <!-- <div class="output-summary--left">
-              <h4 class="base--h4"><$= __("title-summary") $></h4>
-              <div id="personalitySummary" class="output-summary--summary">
-                <p class="base--p">
-                  <$= __("label-summary") $>
-                </p>
-              </div>
-              <a class="base--a output-summary--summary-link" href="http://www.ibm.com/watson/developercloud/doc/personality-insights/science.shtml" target="_blank"><$= __("button-how") $></a>
-            </div> -->
-            <!-- <div class="output-summary--right">
-              <div class="output-summary--consumption-behaviors--section">
-                <h4 class="base--h4"><$= __("behavior-likely") $></h4>
-                <div class="output-summary--likely-behaviors">
-                </div>
-                <h4 class="base--h4"><$= __("behavior-unlikely") $></h4>
-                <div class="output-summary--unlikely-behaviors">
-                </div>
-              </div>
-            </div> -->
-          <!-- </div> -->
-          <!-- <div class="output--stats-row">
-            <div class="output-big-5 output-stats-column">
-              <h4 class="base--h4"><$= __("results-personality") $></h4>
-              <div class="output-stats-column--percentile-label">*% =
-                <$= __("label-percentile") $>
-              </div>
-              <div class="output-big-5--traits output-stats-column--traits"></div>
-            </div>
-            <div class="output-needs output-stats-column">
-              <h4 class="base--h4"><$= __("results-needs") $></h4>
-              <div class="output-stats-column--percentile-label">*% =
-                <$= __("label-percentile") $>
-              </div>
-              <div class="output-needs--traits output-stats-column--traits"></div>
-              <div class="output-needs--more-traits"></div>
-              <a class="output-needs--toggle output-stats-column--toggle base--a" href="javascript:void(0);">>></a>
-            </div>
-            <div class="output-values output-stats-column">
-              <h4 class="base--h4"><$= __("results-values") $></h4>
-              <div class="output-stats-column--percentile-label">*% =
-                <$= __("label-percentile") $>
-              </div>
-              <div class="output-values--traits output-stats-column--traits"></div>
-            </div>
-          </div> -->
           <span class="icon-hyperlink output--json-hyperlink">
             <span class="icon icon-code"></span>
           <button class="base--a icon-hyperlink--button icon-hyperlink--button_BLANK output--json-button" href="">

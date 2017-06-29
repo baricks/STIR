@@ -42,6 +42,7 @@
 	"lang-japanese": "Japanese",
 	"button-analyzetwitter": "Analyze tweets",
 	"note-title": "Note:",
+	"note-facebook": "You will be redirected to Facebook's authorization page and then redirected to this application to complete the analysis.",
 	"note-twitter": "You will be redirected to Twitter's authorization page and then redirected to this application to complete the analysis.",
 	"analysis-title": "Analysis for:",
 	"label-myself": "myself",
@@ -124,5 +125,5 @@
 	" text-placeholder ": " text-placeholder ",
 	"tab-facebook": "tab-facebook",
 	"button-analyzefacebook": "button-analyzefacebook",
-	"note-facebook": "note-facebook"
+	"note-facebook": "You will be redirected to Facebook's authorization page and then redirected to this application to complete the analysis."
 }

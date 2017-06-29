@@ -22,8 +22,7 @@ var helmet = require('helmet');
 
 module.exports = (app) => {
   app.use(helmet({
-    cacheControl: false,
-    frameguard: false
+    cacheControl: false
   }));
 
   app.use(helmet.frameguard('allow-from', 'https://stir.mybluemix.net'));
