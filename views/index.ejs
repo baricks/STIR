@@ -11,85 +11,13 @@
 </head>
 
 <body>
-  <script>
-  // This is called with the results from from FB.getLoginStatus().
-  function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
-    if (response.status === 'connected') {
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-      document.getElementById('inputText2').innerHTML = 'Please log ' +
-        'into this app.';
-    } else {
-      document.getElementById('inputText2').innerHTML = 'Please log ' +
-        'into Facebook.';
-    }
-  }
-  // This function is called when someone finishes with the Login Button.
-  function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
-
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '837607693056127',
-      cookie     : true,
-      xfbml      : true,
-      version    : 'v2.5'
-    });
-
-    // Get login status (logged into FB, logged into FB app, etc)
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-
-  };
-
-  // Load the SDK asynchronously
-  (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
-
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    getFBPosts();
-  }
-  function getFBPosts() {
-
-    var posts;
-    FB.api(
-      '/me/feed?limit=1000',
-      'GET',
-      {"fields":"message"},
-      function(response) {
-        var post =" ";
-        for(var k in response.data) {
-          post = response.data[k].message;
-          if(post === undefined || post === null){
-            post = " ";
-          }
-          posts+="\n "+post;
-        }
-        document.getElementById('inputText2').value = posts.replace("undefined", "");
-        console.log("got posts: " + posts);
-      }
-    );
-  }
-</script>
 
 <!-- The HTML template: -->
 
   <div class="_demo--container">
     <div class="_content input">
       <h2 class="base--h2">STIR</h2>
-      <h3 class="base--h3">A personalized waking system and social performance</h3>
+      <h3 class="base--h3">A personalized waking system and socially engineered performance</h3>
       <p class="base--p">Log into your social platforms to get started. For statistically significant results, you need at least 3500 words and ideally 6000.</p>
       <div class="tab-panels" role="tabpanel">
         <span class="input--reset icon-hyperlink">
@@ -104,6 +32,9 @@
           </li>
           <li class="tab-panels--tab-list-item base--li" style="<% if (showFacebookButton) { %>display: none;<% } %>" role="presentation">
             <a class="tab-panels--tab base--a" id="self-analysis-tab" href="#your-facebook-panel" aria-controls="text-panel" role="tab">Connect Facebook</a>
+          </li>
+          <li class="tab-panels--tab-list-item base--li" style="<% if (showLocation) { %>display: none;<% } %>" role="presentation">
+            <a class="tab-panels--tab base--a" id="self-analysis-tab" href="#your-location-panel" aria-controls="text-panel" role="tab">Location</a>
           </li>
         </ul>
         <div class="tab-panels--tab-content">
@@ -133,6 +64,12 @@
                 <button type="submit" class="base--button input--submit-button2">Analyze Facebook posts</button>
                 <textarea id="inputText2" class="base--textarea input--text-area" placeholder="Please enter text to analyze (minimum of 100 words)..."></textarea>
               </form>
+          </div>
+
+          <!-- Location panel -->
+          <div id="your-location-panel" class="tab-panels--tab-pane" role="tab-panel">
+            <div id="location-info"></div>
+            <div id="weather-info"></div>
           </div>
 
         </div>
@@ -167,6 +104,10 @@
             <pre class="base--pre language-javascript output--json-pre"><code class="base--code language-javascript output--json-code code--json"></code></pre>
           </div>
         </div>
+        <footer>
+          <a class="base--a" href="/privacy-policy">Privacy Policy</a>
+          <a style="padding:15px" class="base--a" href="/terms-of-use">Terms of Use</a>
+        </footer>
       </div>
     </div>
   </div>
@@ -259,7 +200,6 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/5.0.2/markdown-it.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
 
-
   <script type="text/javascript" src="js/vendors/q.js"></script>
   <script type="text/javascript" src="js/components/q_util.js"></script>
   <script type="text/javascript" src="js/components/tab-panels.js"></script>
@@ -269,7 +209,6 @@
   <script type="text/javascript" src="vendor/personality-trait-descriptions/dist/index.js"></script>
   <script type="text/javascript" src="vendor/personality-trait-names/dist/index.js"></script>
   <script type="text/javascript" src="vendor/personality-consumption-preferences/dist/index.js"></script>
-  <script type="text/javascript" src="js/sunburst.js"></script>
 
   <script type="text/javascript" src="js/demo.js"></script>
   <script type="text/javascript" src="js/consumption-preferences-likely-sort.js"></script>

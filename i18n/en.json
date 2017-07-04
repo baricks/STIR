@@ -5,7 +5,8 @@
 	"intro-3": "you need at least 3500 words and ideally 6000",
 	"intro-4": "You can play with the demo with as little as 100 words, but for a more accurate analysis, you need more words.",
 	"button-reset": "Reset",
-	"button-terms": "Terms of use",
+	"button-terms": "Terms of Use",
+	"button-privacy": "Privacy Policy",
 	"terms-title": "Terms of Use",
 	"tab-tweets": "Tweets and Replies",
 	"tab-body": "Body of Text",
@@ -125,5 +126,5 @@
 	" text-placeholder ": " text-placeholder ",
 	"tab-facebook": "tab-facebook",
 	"button-analyzefacebook": "button-analyzefacebook",
-	"note-facebook": "You will be redirected to Facebook's authorization page and then redirected to this application to complete the analysis."
+	"button-privacy": "button-privacy"
 }

@@ -59,6 +59,130 @@ function getBrowserLangNoLocale() {
   return lang.substring(0, 2);
 }
 
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+    // console.log(lat + ", " + lon);
+    displayLocation(lat,lon);
+    getWeather(lat,lon);
+}
+
+function displayLocation(latitude,longitude){
+  var request = new XMLHttpRequest();
+  var method = 'GET';
+  var url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&sensor=true';
+  var async = true;
+
+  request.open(method, url, async);
+  request.onreadystatechange = function(){
+    if(request.readyState == 4 && request.status == 200){
+      var data = JSON.parse(request.responseText);
+      var city = data.results[0].address_components[3].short_name;
+      var state = data.results[0].address_components[5].short_name;
+      var country = data.results[0].address_components[6].long_name;
+      var location_summary = city + ', ' + state + ', ' + country;
+      console.log(location_summary);
+      document.getElementById('location-info').innerHTML = "Location: " + location_summary;
+    }
+  };
+  request.send();
+};
+
+function getWeather(latitude,longitude){
+  var request = new XMLHttpRequest();
+  var method = 'GET';
+  var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + "&lon=" + longitude + "&appid=3580e110f32b35729dcf4ef7b8f92450";
+  var async = true;
+
+  request.open(method, url, async);
+  request.onreadystatechange = function(){
+    if(request.readyState == 4 && request.status == 200){
+      var data = JSON.parse(request.responseText);
+      var weather_description = data.weather[0].description;
+      console.log(weather_description);
+      document.getElementById('weather-info').innerHTML = "Weather: " + weather_description;
+    }
+  };
+  request.send();
+};
+
+// This is called with the results from from FB.getLoginStatus().
+function statusChangeCallback(response) {
+  // console.log('statusChangeCallback');
+  // console.log(response);
+  if (response.status === 'connected') {
+    testAPI();
+  } else if (response.status === 'not_authorized') {
+    document.getElementById('inputText2').innerHTML = 'Please log ' +
+      'into this app.';
+  } else {
+    document.getElementById('inputText2').innerHTML = 'Please log ' +
+      'into Facebook.';
+  }
+}
+// This function is called when someone finishes with the Login Button.
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+}
+
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '837607693056127',
+    cookie     : true,
+    xfbml      : true,
+    version    : 'v2.5'
+  });
+
+  // Get login status (logged into FB, logged into FB app, etc)
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+};
+
+// Load the SDK asynchronously
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+function testAPI() {
+  getFBPosts();
+}
+function getFBPosts() {
+
+  var posts;
+  FB.api(
+    '/me/feed?limit=1000',
+    'GET',
+    {"fields":"message"},
+    function(response) {
+      var post =" ";
+      for(var k in response.data) {
+        post = response.data[k].message;
+        if(post === undefined || post === null){
+          post = " ";
+        }
+        posts+="\n "+post;
+      }
+      document.getElementById('inputText2').value = posts.replace("undefined", "");
+    }
+  );
+}
+
 function extend(target, source) {
   Object.keys(source).forEach(function(k) {
     target[k] = source[k];
@@ -93,7 +217,8 @@ function renderMarkdown(s) {
 
 $(document).ready(function() {
 
-  // var SAMPLE_TEXTS = [ 'ar', 'ja'];
+  getLocation();
+
   var textCache = {};
 
   // globalState.selectedSample = SAMPLE_TEXTS[0];

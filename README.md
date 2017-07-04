@@ -1,6 +1,6 @@
 # STIR
 
-A personalized waking app and social performance.
+A personalized waking app and socially engineered performance.
 
 ## Getting started
 
