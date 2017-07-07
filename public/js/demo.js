@@ -22,6 +22,8 @@ var markdown = function(s) {
 
 var OUTPUT_LANG = 'en';
 
+// var usersRef = ref.child("users");
+
 var globalState = {
   twitterUserId: undefined,
   selectedTwitterUser: undefined,
@@ -89,7 +91,6 @@ function displayLocation(latitude,longitude){
       var state = data.results[0].address_components[5].short_name;
       var country = data.results[0].address_components[6].long_name;
       var location_summary = city + ', ' + state + ', ' + country;
-      console.log(location_summary);
       document.getElementById('location-info').innerHTML = "Location: " + location_summary;
     }
   };
@@ -99,15 +100,14 @@ function displayLocation(latitude,longitude){
 function getWeather(latitude,longitude){
   var request = new XMLHttpRequest();
   var method = 'GET';
-  var url = 'http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + "&lon=" + longitude + "&appid=3580e110f32b35729dcf4ef7b8f92450";
+  var url = 'https://api.apixu.com/v1/current.json?key=911eaf69e5274bddaa5194242170607&q=' + latitude + "," + longitude;
   var async = true;
 
   request.open(method, url, async);
   request.onreadystatechange = function(){
     if(request.readyState == 4 && request.status == 200){
       var data = JSON.parse(request.responseText);
-      var weather_description = data.weather[0].description;
-      console.log(weather_description);
+      var weather_description = data.current.condition.text;
       document.getElementById('weather-info').innerHTML = "Weather: " + weather_description;
     }
   };
@@ -827,26 +827,6 @@ $(document).ready(function() {
     }
   }
 
-  // function showHiddenLanguages() {
-  //   var enableLang = {
-  //     'ar': function() {
-  //       $('label[for="text-ar"]').show();
-  //       $('label[for="lang-ar"]').show();
-  //     }
-  //   };
-  //
-  //
-  //   Object.keys($.url().param()).filter(function(p) {
-  //       return p.slice(0, 5) === 'lang-';
-  //     }).map(function(p) {
-  //       return p.slice(5, p.length);
-  //     }).forEach(function(lang) {
-  //       if (enableLang[lang]) {
-  //         enableLang[lang]();
-  //       }
-  //     });
-  //   }
-
   function selfAnalysis() {
     return QUERY_PARAMS.source == 'myself';
   }
@@ -901,31 +881,67 @@ $(document).ready(function() {
     $inputWordCount.text(countWords($inputTextArea.val()));
   }
 
-  // Save the JSON file
+  // Get the JSON file
   function updateJSON(results) {
     $outputJSONCode.html(JSON.stringify(results, null, 2));
     $('.code--json').each(function(i, b) {
       hljs.highlightBlock(b);
     });
 
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBZmbEkVlaXlB75a4QEoASJnHHFAP4Xabg",
+      authDomain: "stir-f9d29.firebaseapp.com",
+      databaseURL: "https://stir-f9d29.firebaseio.com",
+      projectId: "stir-f9d29",
+      storageBucket: "stir-f9d29.appspot.com",
+      messagingSenderId: "898960908506"
+    };
+    firebase.initializeApp(config);
+    console.log("initialized");
+
+    // Save the JSON file to Firebase
+
     var json_str = JSON.stringify(results, null, 2);
 
-    saveFile('test.json', "data:application/json", new Blob([json_str],{type:""}));
+    // Create new filename
+    var date = new Date();
+    var components = [
+        date.getYear(),
+        date.getMonth(),
+        date.getDate(),
+        date.getHours(),
+        date.getMinutes(),
+        date.getSeconds(),
+        date.getMilliseconds()
+    ];
+    var newId = components.join("");
+    var fileName = newId + '.json';
 
-    function saveFile (name, type, data) {
-        if (data != null && navigator.msSaveBlob)
-            return navigator.msSaveBlob(new Blob([data], { type: type }), name);
+    var storageRef = firebase.storage().ref()
+    var testRef = storageRef.child(fileName);
 
-        var a = $("<a style='display: none;'/>");
-        var url = window.URL.createObjectURL(new Blob([data], {type: type}));
-        a.attr("href", url);
-        a.attr("download", name);
-        $("body").append(a);
-        a[0].click();
-        setTimeout(function(){  // fixes firefox html removal bug
-            window.URL.revokeObjectURL(url);
-            a.remove();
-        }, 500);
+    // Save the JSON file locally
+    uploadFile(fileName, "data:application/json", new Blob([json_str],{type:""}));
+
+    function uploadFile (name, type, data) {
+        // if (data != null && navigator.msSaveBlob)
+        //   return navigator.msSaveBlob(new Blob([data], { type: type }), name);
+        testRef.put(new Blob([json_str],{type:""})).then(function(snapshot) {
+          console.log('Uploaded JSON');
+        });
+
+
+        // var a = $("<a style='display: none;'/>");
+        // var url = window.URL.createObjectURL(new Blob([data], {type: type}));
+        // a.attr("href", url);
+        // a.attr("download", name);
+        // $("body").append(a);
+        // a[0].click();
+        // setTimeout(function(){  // fixes firefox html removal bug
+        //     window.URL.revokeObjectURL(url);
+        //     a.remove();
+        // }, 500);
     }
 
   }
