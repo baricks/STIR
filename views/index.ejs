@@ -19,6 +19,9 @@
       <h2 class="base--h2">STIR</h2>
       <h3 class="base--h3">A personalized waking system and socially engineered performance</h3>
       <p class="base--p">Log into your social platforms to get started. For statistically significant results, you need at least 3500 words and ideally 6000.</p>
+      <form class="base--p">Enter your first name:
+        <input id="user_name" type="text" name="firstname"></input>
+      </form>
       <div class="tab-panels" role="tabpanel">
         <span class="input--reset icon-hyperlink">
           <span class="icon icon-reset"></span>
@@ -60,6 +63,7 @@
           <!-- Facebook panel -->
           <div id="your-facebook-panel" class="tab-panels--tab-pane" role="tab-panel">
             <fb:login-button scope="public_profile,email,user_posts" onlogin="checkLoginState();" data-max-rows="1" data-size="large" data-show-faces="true" data-auto-logout-link="true"></fb:login-button>
+            <p class="base--p"><strong>Note:</strong> You will be redirected to Facebook's authorization page and then redirected to this application to complete the analysis.</span>
               <form class="input--form2">
                 <button type="submit" class="base--button input--submit-button2">Analyze Facebook posts</button>
                 <textarea id="inputText2" class="base--textarea input--text-area" placeholder="Please enter text to analyze (minimum of 100 words)..."></textarea>
@@ -103,6 +107,9 @@
             <h3 class="base--h3"><$= __("label-json") $></h3>
             <pre class="base--pre language-javascript output--json-pre"><code class="base--code language-javascript output--json-code code--json"></code></pre>
           </div>
+          <br/><br/>
+          <h2 class="base--h2">Prompt</h2>
+          <div id="generated-prompt"></div>
         </div>
         <footer>
           <a class="base--a" href="/privacy-policy">Privacy Policy</a>
@@ -208,6 +215,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
 
   <script type="text/javascript" src="js/vendors/q.js"></script>
+  <script type="text/javascript" src="js/vendors/tracery.js"></script>
   <script type="text/javascript" src="js/components/q_util.js"></script>
   <script type="text/javascript" src="js/components/tab-panels.js"></script>
 

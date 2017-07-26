@@ -21,6 +21,9 @@ var markdown = function(s) {
 };
 
 var OUTPUT_LANG = 'en';
+var location_summary;
+var weather_description;
+var user_name;
 
 // var usersRef = ref.child("users");
 
@@ -61,6 +64,10 @@ function getBrowserLangNoLocale() {
   return lang.substring(0, 2);
 }
 
+function getName() {
+  user_name = document.getElementById('user_name').value;
+}
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -90,7 +97,7 @@ function displayLocation(latitude,longitude){
       var city = data.results[0].address_components[3].short_name;
       var state = data.results[0].address_components[5].short_name;
       var country = data.results[0].address_components[6].long_name;
-      var location_summary = city + ', ' + state + ', ' + country;
+      location_summary = city + ', ' + state;
       document.getElementById('location-info').innerHTML = "Location: " + location_summary;
     }
   };
@@ -107,7 +114,8 @@ function getWeather(latitude,longitude){
   request.onreadystatechange = function(){
     if(request.readyState == 4 && request.status == 200){
       var data = JSON.parse(request.responseText);
-      var weather_description = data.current.condition.text;
+      var weather_now = data.current.condition.text;
+      weather_description = weather_now.toLowerCase();
       document.getElementById('weather-info').innerHTML = "Weather: " + weather_description;
     }
   };
@@ -116,8 +124,6 @@ function getWeather(latitude,longitude){
 
 // This is called with the results from from FB.getLoginStatus().
 function statusChangeCallback(response) {
-  // console.log('statusChangeCallback');
-  // console.log(response);
   if (response.status === 'connected') {
     testAPI();
   } else if (response.status === 'not_authorized') {
@@ -162,6 +168,7 @@ window.fbAsyncInit = function() {
 function testAPI() {
   getFBPosts();
 }
+
 function getFBPosts() {
 
   var posts;
@@ -289,25 +296,6 @@ $(document).ready(function() {
     $('input[name="text-lang"]').click(function() {
       globalState.selectedLanguage = $(this).attr('value');
     });
-
-    // $('input[name="text-sample"]').click(function() {
-    //   var textFile = $(this).attr('data-file'),
-    //     orientation = $(this).attr('data-orientation');
-    //   globalState.selectedSample = textFile;
-    //
-    //   if (orientation === 'right-to-left') {
-    //     $inputTextArea.removeClass('left-to-right');
-    //     $inputTextArea.addClass('right-to-left');
-    //   } else {
-    //     $inputTextArea.removeClass('right-to-left');
-    //     $inputTextArea.addClass('left-to-right');
-    //   }
-    //
-    //   $('#languageChooser').hide();
-    //
-    //   loadSampleText(textFile);
-    //   updateWordCount();
-    // });
 
     $(window).resize(function() {
       if ($(window).width() < 800) {
@@ -883,6 +871,11 @@ $(document).ready(function() {
 
   // Get the JSON file
   function updateJSON(results) {
+
+    getName();
+    console.log(user_name);
+    buildPrompt();
+
     $outputJSONCode.html(JSON.stringify(results, null, 2));
     $('.code--json').each(function(i, b) {
       hljs.highlightBlock(b);
@@ -930,20 +923,42 @@ $(document).ready(function() {
         testRef.put(new Blob([json_str],{type:""})).then(function(snapshot) {
           console.log('Uploaded JSON');
         });
-
-
-        // var a = $("<a style='display: none;'/>");
-        // var url = window.URL.createObjectURL(new Blob([data], {type: type}));
-        // a.attr("href", url);
-        // a.attr("download", name);
-        // $("body").append(a);
-        // a[0].click();
-        // setTimeout(function(){  // fixes firefox html removal bug
-        //     window.URL.revokeObjectURL(url);
-        //     a.remove();
-        // }, 500);
     }
 
+    // Tracery grammar
+
+    function buildPrompt() {
+        var syntax = {
+          "sentences": [
+            "#intro_sentence# #location_sentence#"
+          ],
+          "intro_sentence": [
+            "Today you’ll be waking: #name#."
+          ],
+          "location_sentence": [
+            "#name# lives in #location#, where it's #weather#.",
+            "It's #weather# in #name#'s neck of the woods, #location#.",
+            "In #location#, where #name# lives, it's #weather#."
+          ],
+          // "personality_sentence": [
+          //   "#name# is #personality# and they need #needs#."
+          // ],
+          // "request_sentence": [],
+          "name": user_name,
+          // "pronoun": user_prounoun,
+          "location": location_summary,
+          "weather": weather_description
+          // "needs": user_needs,
+          // "personality": user_personality
+        };
+
+        var grammar = tracery.createGrammar(syntax);
+        // grammar.addModifiers(tracery.baseEngModifiers);
+        var prompt = grammar.flatten('#sentences#')
+        console.log(prompt);
+        document.getElementById('generated-prompt').innerHTML = prompt;
+        return prompt;
+      }
   }
 
   initialize();
