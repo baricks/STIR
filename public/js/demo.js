@@ -21,9 +21,29 @@ var markdown = function(s) {
 };
 
 var OUTPUT_LANG = 'en';
+
 var location_summary;
 var weather_description;
+
 var user_name;
+var pronoun;
+var pronoun_possessive;
+var pronoun_object;
+
+var personality_traits;
+var user_needs;
+var need1;
+var last_sentence;
+var description_sentence;
+var action_sentence;
+// Big 5 personality traits, ranked 1 to 5
+var big5personality_1;
+var big5personality_2;
+
+// Big 5 personality traits children, ranked 1 to 5
+// Trait #1
+var big5personality_1_child_1;
+var big5personality_1_child_2;
 
 // var usersRef = ref.child("users");
 
@@ -66,6 +86,20 @@ function getBrowserLangNoLocale() {
 
 function getName() {
   user_name = document.getElementById('user_name').value;
+  // console.log(user_name);
+}
+
+function getPronoun() {
+  pronoun = document.getElementById('pronoun').value.toLowerCase();
+  var pronounList = {
+    'he': ['his', 'him'],
+    'she': ['her', 'her'],
+    'they': ['their', 'them']
+  }
+  pronoun_possessive = pronounList[pronoun][0];
+  pronoun_object = pronounList[pronoun][1];
+  console.log(pronoun_possessive);
+  console.log(pronoun_object);
 }
 
 function getLocation() {
@@ -79,7 +113,6 @@ function getLocation() {
 function showPosition(position) {
     var lat = position.coords.latitude;
     var lon = position.coords.longitude;
-    // console.log(lat + ", " + lon);
     displayLocation(lat,lon);
     getWeather(lat,lon);
 }
@@ -98,7 +131,8 @@ function displayLocation(latitude,longitude){
       var state = data.results[0].address_components[5].short_name;
       var country = data.results[0].address_components[6].long_name;
       location_summary = city + ', ' + state;
-      document.getElementById('location-info').innerHTML = "Location: " + location_summary;
+      // console.log(location_summary);
+      // document.getElementById('location-info').innerHTML = "Location: " + location_summary;
     }
   };
   request.send();
@@ -116,7 +150,8 @@ function getWeather(latitude,longitude){
       var data = JSON.parse(request.responseText);
       var weather_now = data.current.condition.text;
       weather_description = weather_now.toLowerCase();
-      document.getElementById('weather-info').innerHTML = "Weather: " + weather_description;
+      // console.log(weather_description);
+      // document.getElementById('weather-info').innerHTML = "Weather: " + weather_description;
     }
   };
   request.send();
@@ -268,8 +303,6 @@ $(document).ready(function() {
     locale: globalState.userLocale || OUTPUT_LANG
   });
 
-
-
   function setTextSample(value, readonly) {
     $('#inputText').val(value);
     if (readonly) {
@@ -280,6 +313,8 @@ $(document).ready(function() {
   }
 
   function setLoadingState() {
+    getName();
+    getPronoun();
     resetOutputs();
     $loading.show();
     scrollTo($loading);
@@ -591,10 +626,33 @@ $(document).ready(function() {
     }
   }
 
+  function mapPersonalityTraits(big5personality_1) {
+    var big5PersonalityTraits = {
+      'openness': 'has a very open outlook',
+      'conscientiousness': 'pays attention to details',
+      'extraversion': 'enjoys going to parties and meeting new people',
+      'agreeableness': 'is friendly and nice',
+      'emotional range': 'has a broad emotional range',
+    };
+    return (big5PersonalityTraits[big5personality_1]);
+  }
+
+  function mapPersonalityToPrompt(big5personality_1) {
+    var big5PersonalityPrompts = {
+      'openness': 'Imagine you’re their close friend. Tell them something that will inspire them to try something new today.',
+      'conscientiousness': 'Imagine you’re their personal assistant and you admire everything they do. Give them a list of what to do today.',
+      'extraversion': 'Appeal to their social butterfly tendencies by telling them about a time you woke up early to see your friends.',
+      'agreeableness': 'Think about positive messages you have heard in the past and repeat one to them.',
+      'emotional range': 'They respond to softly spoken words. Imagine you are their mother waking them up.',
+    };
+    return (big5PersonalityPrompts[big5personality_1]);
+  }
+
   function loadConsumptionPreferences(data) {
     var cpsect = $('.output-summary--consumption-behaviors--section');
     var behaviors = $('.output-summary--consumption-behaviors--section');
     var behaviors_likely = $('.output-summary--likely-behaviors');
+    // console.log(behaviors_likely);
     var behaviors_unlikely = $('.output-summary--unlikely-behaviors');
     var lang = data.processed_language;
 
@@ -647,10 +705,34 @@ $(document).ready(function() {
   const replacements = replacementsForLang(globalState.userLocale || OUTPUT_LANG);
 
   function loadOutput(data) {
+
     setTextSummary(data);
     loadWordCount(data);
 
-    // Add wrapped traits data from the user profile into the html
+    getName();
+    getPronoun();
+
+    // Rank the needs according to strength
+    user_needs = wrapNeeds(data).sort(sortScores);
+    need1 = user_needs[0].name.toLowerCase();
+
+    // Rank the Big Five Personality traits according to strength
+    personality_traits = wrapTraits(data).sort(sortScores);
+
+    // Big 5 personality traits, strongest
+    big5personality_1 = personality_traits[0].name.toLowerCase();
+    // big5personality_2 = personality_traits[1].name.toLowerCase();
+
+    // Big 5 personality traits children, strongest
+    // Trait #1
+    big5personality_1_child_1 = personality_traits[0].children[0].name.toLowerCase();
+    big5personality_1_child_2 = personality_traits[0].children[1].name.toLowerCase();
+
+    description_sentence = mapPersonalityTraits(big5personality_1);
+    action_sentence = mapPersonalityToPrompt(big5personality_1);
+    // console.log(last_sentence);
+
+    //Add wrapped traits data from the user profile into the html
     $big5Traits.append(_.template(big5PercentTemplate.innerHTML, {
       items: wrapTraits(data).sort(sortScores),
       tooltips: function(traitId) {
@@ -682,7 +764,6 @@ $(document).ready(function() {
       }
     }));
 
-    // NOTE: v3 update - is this necessary here? - should it be moved elsewhere?
     globalState.currentProfile = data;
 
   }
@@ -820,7 +901,7 @@ $(document).ready(function() {
   }
 
   function setSelfAnalysis() {
-    console.log('Analyzing twitter user ', '@' + TWITTER_USER);
+    // console.log('Analyzing twitter user ', '@' + TWITTER_USER);
     globalState.twitterUserId = TWITTER_USER.handle;
     globalState.twitterUserImage = TWITTER_USER.image;
     loadTwitterUser(TWITTER_USER.handle, {live_crawling: true});
@@ -871,9 +952,6 @@ $(document).ready(function() {
 
   // Get the JSON file
   function updateJSON(results) {
-
-    getName();
-    console.log(user_name);
     buildPrompt();
 
     $outputJSONCode.html(JSON.stringify(results, null, 2));
@@ -891,10 +969,9 @@ $(document).ready(function() {
       messagingSenderId: "898960908506"
     };
     firebase.initializeApp(config);
-    console.log("initialized");
+    // console.log("initialized");
 
     // Save the JSON file to Firebase
-
     var json_str = JSON.stringify(results, null, 2);
 
     // Create new filename
@@ -928,28 +1005,36 @@ $(document).ready(function() {
     // Tracery grammar
 
     function buildPrompt() {
+
         var syntax = {
           "sentences": [
-            "#intro_sentence# #location_sentence#"
+            "#intro_sentence# #location_sentence# #personality_sentence# #prompt_sentence#"
           ],
           "intro_sentence": [
             "Today you’ll be waking: #name#."
           ],
           "location_sentence": [
             "#name# lives in #location#, where it's #weather#.",
-            "It's #weather# in #name#'s neck of the woods, #location#.",
-            "In #location#, where #name# lives, it's #weather#."
+            "Right now it's #weather# in #name#'s neck of the woods, #location#.",
+            "In #location#, where #name# lives, it's currently #weather#.",
+            "The weather in #pronoun_possessive# city, #location#, is currently #weather#."
           ],
-          // "personality_sentence": [
-          //   "#name# is #personality# and they need #needs#."
-          // ],
-          // "request_sentence": [],
+          "personality_sentence": [
+            "#name# #description_sentence#, with a strong leaning toward #personality1_child1# and #personality1_child2#.",
+            "As someone who #description_sentence#, #name# has a talent for #personality1_child1# and #personality1_child2#.",
+            "#name# #description_sentence#, with a strong leaning towards #personality1_child1# and #personality1_child2#."
+          ],
           "name": user_name,
-          // "pronoun": user_prounoun,
+          "pronoun": pronoun,
+          "pronoun_possessive": pronoun_possessive,
+          "pronoun_object": pronoun_object,
           "location": location_summary,
-          "weather": weather_description
-          // "needs": user_needs,
-          // "personality": user_personality
+          "weather": weather_description,
+          "personality1": big5personality_1,
+          "personality1_child1": big5personality_1_child_1,
+          "personality1_child2": big5personality_1_child_2,
+          "description_sentence": description_sentence,
+          "prompt_sentence": action_sentence
         };
 
         var grammar = tracery.createGrammar(syntax);

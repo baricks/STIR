@@ -19,8 +19,11 @@
       <h2 class="base--h2">STIR</h2>
       <h3 class="base--h3">A personalized waking system and socially engineered performance</h3>
       <p class="base--p">Log into your social platforms to get started. For statistically significant results, you need at least 3500 words and ideally 6000.</p>
-      <form class="base--p">Enter your first name:
-        <input id="user_name" type="text" name="firstname"></input>
+      <form class="base--p" onsubmit="getName(); return false">First name:
+        <input id="user_name" type="text"></input>
+      </form>
+      <form class="base--p" onsubmit="getPronoun(); return false">Pronoun(he/she/they):
+        <input id="pronoun" type="text"></input>
       </form>
       <div class="tab-panels" role="tabpanel">
         <span class="input--reset icon-hyperlink">
@@ -36,9 +39,9 @@
           <li class="tab-panels--tab-list-item base--li" style="<% if (showFacebookButton) { %>display: none;<% } %>" role="presentation">
             <a class="tab-panels--tab base--a" id="self-analysis-tab" href="#your-facebook-panel" aria-controls="text-panel" role="tab">Connect Facebook</a>
           </li>
-          <li class="tab-panels--tab-list-item base--li" style="<% if (showLocation) { %>display: none;<% } %>" role="presentation">
+          <!-- <li class="tab-panels--tab-list-item base--li" style="<% if (showLocation) { %>display: none;<% } %>" role="presentation">
             <a class="tab-panels--tab base--a" id="self-analysis-tab" href="#your-location-panel" aria-controls="text-panel" role="tab">Location</a>
-          </li>
+          </li> -->
         </ul>
         <div class="tab-panels--tab-content">
 
@@ -71,10 +74,10 @@
           </div>
 
           <!-- Location panel -->
-          <div id="your-location-panel" class="tab-panels--tab-pane" role="tab-panel">
+          <!-- <div id="your-location-panel" class="tab-panels--tab-pane" role="tab-panel">
             <div id="location-info"></div>
             <div id="weather-info"></div>
-          </div>
+          </div> -->
 
         </div>
       </div>
