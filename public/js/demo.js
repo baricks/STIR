@@ -98,8 +98,8 @@ function getPronoun() {
   }
   pronoun_possessive = pronounList[pronoun][0];
   pronoun_object = pronounList[pronoun][1];
-  console.log(pronoun_possessive);
-  console.log(pronoun_object);
+  // console.log(pronoun_possessive);
+  // console.log(pronoun_object);
 }
 
 function getLocation() {
@@ -313,8 +313,6 @@ $(document).ready(function() {
   }
 
   function setLoadingState() {
-    getName();
-    getPronoun();
     resetOutputs();
     $loading.show();
     scrollTo($loading);
@@ -323,6 +321,8 @@ $(document).ready(function() {
   function loadTwitterUser(twitterHandle, options) {
     setLoadingState();
     getProfileForTwitterUser(twitterHandle, options);
+    getName();
+    getPronoun();
   }
 
   function registerHandlers() {
@@ -390,6 +390,8 @@ $(document).ready(function() {
         : $('input#text-' + globalState.selectedSample).attr('data-lang');
 
       setLoadingState();
+      getName();
+      getPronoun();
 
       getProfileForText($('.input--text-area').val(), {language: lang});
     });
@@ -708,9 +710,6 @@ $(document).ready(function() {
 
     setTextSummary(data);
     loadWordCount(data);
-
-    getName();
-    getPronoun();
 
     // Rank the needs according to strength
     user_needs = wrapNeeds(data).sort(sortScores);
