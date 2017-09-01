@@ -208,7 +208,7 @@ function getFBPosts() {
 
   var posts;
   FB.api(
-    '/me/feed?limit=1000',
+    '/me/posts?limit=1000',
     'GET',
     {"fields":"message"},
     function(response) {
@@ -481,13 +481,14 @@ $(document).ready(function() {
     var defaults = extend({
       source_type: 'text',
       accept_language: globalState.userLocale || OUTPUT_LANG,
-      include_raw: false,
+      include_raw: true,
       consumption_preferences: true
     }, options || {});
 
     if (defaults.source_type !== 'twitter') {
       defaults = extend({
-        language: globalState.userLocale || OUTPUT_LANG
+        language: globalState.userLocale || OUTPUT_LANG,
+        raw_scores: true,
       }, defaults);
     }
     return defaults;
@@ -522,7 +523,7 @@ $(document).ready(function() {
         updateJSON(data);
         loadConsumptionPreferences(data);
         enableAnalyzeButtons(true);
-
+        console.log(data);
       },
       error: function(err) {
         // eslint-disable-next-line
@@ -654,7 +655,6 @@ $(document).ready(function() {
     var cpsect = $('.output-summary--consumption-behaviors--section');
     var behaviors = $('.output-summary--consumption-behaviors--section');
     var behaviors_likely = $('.output-summary--likely-behaviors');
-    // console.log(behaviors_likely);
     var behaviors_unlikely = $('.output-summary--unlikely-behaviors');
     var lang = data.processed_language;
 
@@ -775,12 +775,14 @@ $(document).ready(function() {
         name: replacements[traitName] ? replacements[traitName] : traitName,
         id: obj.trait_id,
         score: Math.round(obj.percentile * 100),
+        raw_score: obj.raw_score,
         children: obj.children.map(function(obj2) {
           const traitName2 = TraitNames.name(obj2.trait_id);
           return {
             name: replacements[traitName2] ? replacements[traitName2] : traitName2,
             id: obj2.trait_id,
-            score: Math.round(obj2.percentile * 100)
+            score: Math.round(obj2.percentile * 100),
+            raw_score: obj2.raw_score
           }
         }).sort(function(a, b) { return b.score - a.score; })
       }
@@ -793,7 +795,8 @@ $(document).ready(function() {
       return {
         id: obj.trait_id,
         name: replacements[traitName] ? replacements[traitName] : traitName,
-        score: Math.round(obj.percentile * 100)
+        score: Math.round(obj.percentile * 100),
+        raw_score: obj.raw_score
       }
     });
   }
@@ -804,7 +807,8 @@ $(document).ready(function() {
       return {
         id: obj.trait_id,
         name: replacements[traitName] ? replacements[traitName] : traitName,
-        score: Math.round(obj.percentile * 100)
+        score: Math.round(obj.percentile * 100),
+        raw_score: obj.raw_score
       };
     });
   }
@@ -922,10 +926,6 @@ $(document).ready(function() {
     $('input[name="text-sample"]:first').attr('checked', true);
 
     globalState.selectedTwitterUser = $('input[name="twitter"]:first').val();
-    // showHiddenLanguages();
-    // preloadSampleTexts(function() {
-    //   loadSampleText(globalState.selectedSample);
-    // });
     registerHandlers();
     $inputTextArea.addClass('orientation', 'left-to-right');
 
